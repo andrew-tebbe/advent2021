@@ -3,6 +3,8 @@ use std::fs::File;
 use std::io::{self, BufRead};
 use std::path::Path;
 
+pub struct StrU32Pair{pub string : String, pub int : u32}
+
 fn read_lines<P>(filename: P) -> io::Result<io::Lines<io::BufReader<File>>>
 where P: AsRef<Path>, {
     let file = File::open(filename)?;
@@ -16,6 +18,24 @@ pub fn parse_file_u32(filename: &'static str) -> Vec<u32> {
             if let Ok(entry_str) = line {
                 let entry_val : u32 = entry_str.parse::<u32>().unwrap();
                 entries.push(entry_val);
+            }
+        }
+    }
+    return entries;
+}
+
+pub fn parse_file_str_u32(filename: &'static str) -> Vec<StrU32Pair> {
+    let mut entries : Vec<StrU32Pair> = Vec::new();
+    if let Ok(lines) = read_lines(filename) {
+        for line in lines {
+            if let Ok(entry_str) = line {
+                let parts : Vec<&str> = entry_str.split_whitespace().collect();
+                let entry_str_part : &str = parts[0];
+                let entry_int_part : u32 = parts[1].parse::<u32>().unwrap();
+                let mut box_val = String::new();
+                box_val.push_str(entry_str_part);
+                let pair = StrU32Pair{string : box_val, int : entry_int_part};
+                entries.push(pair);
             }
         }
     }
