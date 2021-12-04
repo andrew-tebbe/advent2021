@@ -42,6 +42,23 @@ pub fn parse_file_str_u32(filename: &'static str) -> Vec<StrU32Pair> {
     return entries;
 }
 
+pub fn parse_file_bitstring(filename: &'static str) -> Vec<&[u8]> {
+    let mut entries = Vec::new();
+    if let Ok(lines) = read_lines(filename) {
+        for line in lines {
+            if let Ok(entry_str) = line {
+                let mut bitstring = Vec::new();
+                for bit in entry_str.chars() {
+                    let entry_val = bit.to_digit(10).unwrap() as u8;
+                    bitstring.push(entry_val)
+                }
+                entries.push(&*bitstring.leak());
+            }
+        }
+    }
+    return entries;
+}
+
 pub trait AOCChallenge {
     fn part1_impl(in_file: &'static str);
 
