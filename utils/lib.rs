@@ -75,6 +75,19 @@ pub fn parse_file_u32_vec(filename: &'static str) -> Vec<u32> {
     return entries;
 }
 
+pub fn parse_file_u32_matrix(filename: &'static str) -> Vec<Vec<u32>> {
+    let mut entries : Vec<Vec<u32>> = Vec::new();
+    if let Ok(lines) = read_lines(filename) {
+        for line in lines {
+            if let Ok(entry_str) = line {
+                let entry_vals : Vec<u32> = entry_str.chars().map(|x| x.to_digit(10).unwrap()).collect();
+                entries.push(entry_vals);
+            }
+        }
+    }
+    return entries;
+}
+
 pub trait AOCChallenge {
     fn part1_impl(in_file: &'static str);
 
